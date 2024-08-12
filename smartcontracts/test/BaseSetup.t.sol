@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
 
-import {Counter} from "../src/Counter.sol";
 import {Utils} from "./Utils.t.sol";
+import {RealDigital} from "../src/RealDigital.sol";
 
 contract BaseSetup is Utils {
-    Counter counter;
+    RealDigital realDigital;
 
     address[] _users;
     address controller;
@@ -33,7 +33,7 @@ contract BaseSetup is Utils {
         vm.label(zero, "ZERO");
 
         vm.startPrank(controller);
-        counter = new Counter();
+        realDigital = new RealDigital();
         vm.stopPrank();
     }
 
