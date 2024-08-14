@@ -4,20 +4,19 @@ pragma solidity ^0.8.20;
 import {RealDigital} from "./RealDigital.sol";
 import {RealTokenizado} from "./RealTokenizado.sol";
 
+error Unauthorized(address you, address owner);
+
 contract SwapOneStep {
     RealDigital public realDigital;
-    RealTokenizado public realTokenizado1;
-    RealTokenizado public realTokenizado2;
+    address[] participants;
 
-    address[] participants = [
-        address(0x0),
-        address(0x1),
-        address(0x2),
-        address(0x3),
-        address(0x4)
-    ];
+    constructor(address _realDigital, address[] memory _participants) {
+        realDigital = RealDigital(_realDigital);
 
-    constructor() {}
+        for (uint256 i = 0; i < participants.length; i++) {
+            participants.push(_participants[i]);
+        }
+    }
 
     modifier onlyParticipants() {
         bool isParticipant = false;
@@ -27,24 +26,21 @@ contract SwapOneStep {
                 break;
             }
         }
-        require(isParticipant, "Unauthorized");
+        if (!isParticipant) {
+            revert Unauthorized(msg.sender, participants[0]);
+        }
         _;
     }
 
     function swap(
-        address _realDigital,
         address _realTokenizado1,
         address _client1,
         address _realTokenizado2,
         address _client2,
         uint256 amount
     ) external onlyParticipants {
-        realDigital = RealDigital(_realDigital);
-        realTokenizado1 = RealTokenizado(_realTokenizado1);
-        realTokenizado2 = RealTokenizado(_realTokenizado2);
-
-        //Transferir Real digital
-        // Transferir Real tokenizado
+        RealTokenizado realTokenizado1 = RealTokenizado(_realTokenizado1);
+        RealTokenizado realTokenizado2 = RealTokenizado(_realTokenizado2);
 
         realDigital.transferSwap(
             realTokenizado1.owner(),
@@ -52,7 +48,7 @@ contract SwapOneStep {
             amount
         );
 
-        realTokenizado1.burnFrom(_client1, amount);
+        realTokenizado1.burn(_client1, amount);
         realTokenizado2.mint(_client2, amount);
     }
 }

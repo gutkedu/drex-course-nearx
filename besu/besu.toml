@@ -1,0 +1,25 @@
+genesis-file = "genesis-dev.json"
+
+miner-enabled = true
+miner-coinbase = "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73"
+
+host-allowlist = ["*"]
+
+rpc-http-cors-origins = ["*"]
+rpc-http-enabled = true
+rpc-http-host = "127.0.0.1"
+rpc-http-port = 8545
+
+rpc-ws-host = "127.0.0.1"
+rpc-ws-port = 8546
+rpc-ws-api = ["ETH", "NET", "WEB3", "TRACE", "DEBUG", "MINER"]
+rpc-ws-enabled = true
+
+data-path = "./besudata"
+target-gas-limit = 10000000
+min-gas-price = 0
+#logging = "DEBUG"
+
+bootnodes = [
+  "enode://0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef@127.0.0.1:30303",
+]

@@ -3,16 +3,19 @@ pragma solidity ^0.8.20;
 
 import {RealDigital} from "./RealDigital.sol";
 
+error Unauthorized(address you, address owner);
+
 contract STR {
     RealDigital public realDigitalContract;
+    address[] public participants;
 
-    address[] public participants = [
-        address(0x0),
-        address(0x1),
-        address(0x2),
-        address(0x3),
-        address(0x4)
-    ];
+    constructor(address _realDigital, address[] memory _participants) {
+        realDigitalContract = RealDigital(_realDigital);
+
+        for (uint256 i = 0; i < participants.length; i++) {
+            participants.push(_participants[i]);
+        }
+    }
 
     modifier onlyParticipants() {
         bool isParticipant = false;
@@ -22,7 +25,9 @@ contract STR {
                 break;
             }
         }
-        require(isParticipant, "Unauthorized");
+        if (!isParticipant) {
+            revert Unauthorized(msg.sender, participants[0]);
+        }
         _;
     }
 
